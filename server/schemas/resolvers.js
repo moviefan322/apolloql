@@ -1,5 +1,6 @@
 const { User } = require("../models");
 const { signToken } = require("../utils/auth");
+const { AuthenticationError } = require("apollo-server-express");
 
 const resolvers = {
   Query: {
@@ -55,18 +56,21 @@ const resolvers = {
     },
 
     // save a book to a user's `savedBooks` field by adding it to the set (to prevent duplicates)
-    async saveBook(parent, args, context) {
-      if (!context.user) {
-        throw new Error("You need to be logged in!");
+    saveBook: async (parent, { input: newBook }, context) => {
+      if (context.user) {
+        const updatedUser = await User.findOneAndUpdate(
+          { _id: context.user._id },
+          {
+            $push: { savedBooks: newBook },
+          },
+          {
+            new: true,
+            // runValidators: true,
+          }
+        );
+        return updatedUser;
       }
-
-      const updatedUser = await User.findOneAndUpdate(
-        { _id: context.user._id },
-        { $addToSet: { savedBooks: args.bookData } },
-        { new: true, runValidators: true }
-      );
-
-      return updatedUser;
+      throw new AuthenticationError("You need to be logged in!");
     },
 
     // remove a book from `savedBooks`
