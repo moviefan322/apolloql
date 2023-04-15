@@ -13,37 +13,12 @@ const SavedBooks = () => {
   // use this to determine if `useEffect()` hook needs to run again
   const userDataLength = Object.keys(userData).length;
 
-  //Remove the useEffect() Hook that sets the state for UserData.
-  // useEffect(() => {
-  //   const getUserData = async () => {
-  //     try {
-  //       const token = Auth.loggedIn() ? Auth.getToken() : null;
-
-  //       if (!token) {
-  //         return false;
-  //       }
-
-  //       const response = await getMe(token);
-
-  //       if (!response.ok) {
-  //         throw new Error('something went wrong!');
-  //       }
-
-  //       const user = await response.json();
-  //       setUserData(user);
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   };
-
-  //   getUserData();
-  // }, [userDataLength]);
-
   //use the useQuery() Hook to execute the GET_ME query on load and save it to a variable named userData.
 
   useQuery(GET_ME, {
     onCompleted: (data) => {
       setUserData(data.me);
+      console.log(userData);
     },
 
     onError: (err) => {
@@ -84,7 +59,7 @@ const SavedBooks = () => {
 
   return (
     <>
-      <div fluid className="text-light bg-dark p-5">
+      <div className="fluid text-light bg-dark p-5">
         <Container>
           <h1>Viewing saved books!</h1>
         </Container>
