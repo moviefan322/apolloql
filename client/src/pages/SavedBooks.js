@@ -40,7 +40,7 @@ const SavedBooks = () => {
       const response = await removeBook({ variables: { bookId } }, token);
 
       if (!response.ok) {
-        throw new Error("something went wrong!");
+        console.log(response);
       }
 
       const updatedUser = await response.json();
