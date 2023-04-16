@@ -37,16 +37,12 @@ const SavedBooks = () => {
     //Use the useMutation() Hook to execute the REMOVE_BOOK mutation in the handleDeleteBook() function instead of the deleteBook() function that's imported from API file. (Make sure you keep the removeBookId() function in place!)
     try {
       // const response = await deleteBook(bookId, token);
-      const response = await removeBook({ variables: { bookId } }, token);
+      const { data } = await removeBook({ variables: { bookId } }, token);
 
-      if (!response.ok) {
-        console.log(response);
+      if (data) {
+        removeBookId(bookId);
+        setUserData(data.removeBook);
       }
-
-      const updatedUser = await response.json();
-      setUserData(updatedUser);
-      // upon success, remove book's id from localStorage
-      removeBookId(bookId);
     } catch (err) {
       console.error(err);
     }
