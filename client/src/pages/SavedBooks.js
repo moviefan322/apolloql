@@ -8,7 +8,7 @@ import { removeBookId } from "../utils/localStorage";
 
 const SavedBooks = () => {
   const [userData, setUserData] = useState({});
-  const removeBook = useMutation(REMOVE_BOOK);
+  const [removeBook] = useMutation(REMOVE_BOOK);
 
   // use this to determine if `useEffect()` hook needs to run again
   const userDataLength = Object.keys(userData).length;
@@ -37,7 +37,7 @@ const SavedBooks = () => {
     //Use the useMutation() Hook to execute the REMOVE_BOOK mutation in the handleDeleteBook() function instead of the deleteBook() function that's imported from API file. (Make sure you keep the removeBookId() function in place!)
     try {
       // const response = await deleteBook(bookId, token);
-      const response = await removeBook(bookId, token);
+      const response = await removeBook({ variables: { bookId } }, token);
 
       if (!response.ok) {
         throw new Error("something went wrong!");

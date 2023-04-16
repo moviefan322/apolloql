@@ -78,6 +78,9 @@ const resolvers = {
 
     // remove a book from `savedBooks`
     async removeBook(parent, args, context) {
+      console.log("removeBook resolver called with args:", args);
+      console.log("context.user:", context.user);
+
       if (!context.user) {
         throw new Error("You need to be logged in!");
       }
@@ -87,6 +90,8 @@ const resolvers = {
         { $pull: { savedBooks: { bookId: args.bookId } } },
         { new: true }
       );
+
+      console.log("updatedUser:", updatedUser);
 
       if (!updatedUser) {
         throw new Error("Couldn't find user with this id!");
